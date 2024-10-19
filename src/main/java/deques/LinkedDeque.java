@@ -36,8 +36,6 @@ public class LinkedDeque<E> implements Deque<E> {
         size += 1;
 
         Node<E> newFirst = new Node<>(element, front, front.next);
-        //newFirst.next = front.next;
-        //newFirst.prev = front;
         front.next = newFirst;
         newFirst.next.prev = newFirst;
     }
@@ -48,8 +46,6 @@ public class LinkedDeque<E> implements Deque<E> {
         size += 1;
 
         Node<E> newBack = new Node<>(element, back.prev, back);
-        //newBack.next = back;
-        //newBack.prev = back.prev;
         back.prev = newBack;
         newBack.prev.next = newBack;
     }

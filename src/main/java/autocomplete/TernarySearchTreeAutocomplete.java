@@ -1,5 +1,7 @@
 package autocomplete;
 
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,14 +25,92 @@ public class TernarySearchTreeAutocomplete implements Autocomplete {
 
     @Override
     public void addAll(Collection<? extends CharSequence> terms) {
-        // TODO: Replace with your code
-        throw new UnsupportedOperationException("Not implemented yet");
+
+        for(CharSequence key : terms) {
+            overallRoot = addOne(overallRoot, key, 0);
+        }
+        //System.out.println("__START__" + overallRoot.data);
     }
+
+    private Node addOne(Node n, CharSequence key, int index) {
+        char c = key.charAt(index);
+        if (n == null) {
+            n = new Node(c);
+        }
+
+        if (c < n.data) {
+            n.left = addOne(n.left, key, index);
+        } else if (c > n.data) {
+            n.right = addOne(n.right, key, index);
+        } else if (index < key.length() - 1) {
+            n.mid = addOne(n.mid, key, index + 1);
+        }
+        else {
+            n.isTerm = true; // This was the hardest part since I forgot to do this at the start
+            return n;
+        }
+        return n;
+    }
+
+
+
 
     @Override
     public List<CharSequence> allMatches(CharSequence prefix) {
-        // TODO: Replace with your code
-        throw new UnsupportedOperationException("Not implemented yet");
+        ArrayList<CharSequence> returnlist = new ArrayList<>();
+        if (prefix == null) {
+            return new ArrayList<>();
+        }
+
+        Node start = get(overallRoot, prefix, 0);
+
+        //System.out.println("left" + start.left.data);
+        //System.out.println("mid" + start.mid.data);
+        //System.out.println("right" + start.right.data);
+        //returnlist.add(prefix);
+
+        if (start.isTerm == true) {
+            returnlist.add(prefix);
+        }
+
+        getNext(start.mid, prefix, returnlist);
+
+        System.out.println(returnlist);
+        return returnlist;
+    }
+
+    private void getNext(Node n, CharSequence prefix, ArrayList<CharSequence> list) {
+        if (n == null) { //end case
+            //System.out.println("__NOTFOUND__");
+            return;
+        }
+        if (n.isTerm == true) {
+            list.add(prefix.toString() + n.data);
+        }
+
+        getNext(n.left, prefix, list);
+        getNext(n.mid, prefix.toString()+n.data, list);
+        getNext(n.right, prefix, list);
+    }
+
+    private Node get(Node n, CharSequence key, int index) {
+        if (n == null) {
+            return null;
+        }
+        char c = key.charAt(index);
+        //System.out.println("__KEY__" + key);
+        if (c < n.data) {
+            return get(n.left, key, index);
+        } else if (c > n.data) {
+            return get(n.right, key, index);
+        } else if (index < key.length() - 1) {
+            return get(n.mid, key, index + 1);
+        }
+        else {
+            //System.out.println("__INDEX__" + index);
+            //System.out.println("__VALUE__" + n.data);
+            return n;
+        }
     }
 
     /**
