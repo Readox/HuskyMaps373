@@ -75,7 +75,7 @@ public class TernarySearchTreeAutocomplete implements Autocomplete {
 
         getNext(start.mid, prefix, returnlist);
 
-        System.out.println(returnlist);
+        //System.out.println(returnlist);
         return returnlist;
     }
 
