@@ -1,12 +1,15 @@
 package minpq;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -70,6 +73,64 @@ public abstract class MinPQTests {
                 int expectedPriority = priorities[expected];
                 int actualPriority = priorities[actual];
                 assertEquals(expectedPriority, actualPriority);
+            }
+        }
+    }
+
+    @Test
+    public void randomIntegersRandomPriorities() {
+        MinPQ<Integer> reference = new DoubleMapMinPQ<>();
+        MinPQ<Integer> testing = createMinPQ();
+
+        int iterations = 10000;
+        int maxElement = 1000;
+        Random random = new Random();
+        for (int i = 0; i < iterations; i += 1) {
+            int element = random.nextInt(maxElement);
+            double priority = random.nextDouble();
+            reference.addOrChangePriority(element, priority);
+            testing.addOrChangePriority(element, priority);
+                    //System.out.println(reference.getPriority(element) + " " + testing.getPriority(element));
+                    //System.out.println(reference.size() + " " + testing.size());
+            assertEquals(reference.peekMin(), testing.peekMin());
+            assertEquals(reference.size(), testing.size());
+
+
+            for (int e = 0; e < maxElement; e += 1) {
+                if (reference.contains(e)) {
+                            //System.out.println(testing.size());
+                            //System.out.println(reference.getPriority(e) + " " + testing.getPriority(e));
+                    assertTrue(testing.contains(e));
+                    assertEquals(reference.getPriority(e), testing.getPriority(e));
+                } else {
+                    assertFalse(testing.contains(e));
+                }
+            }
+        }
+        for (int i = 0; i < iterations; i += 1) {
+            boolean shouldRemoveMin = random.nextBoolean();
+            if (shouldRemoveMin && !reference.isEmpty()) {
+                assertEquals(reference.removeMin(), testing.removeMin());
+            } else {
+                int element = random.nextInt(maxElement);
+                double priority = random.nextDouble();
+                reference.addOrChangePriority(element, priority);
+                testing.addOrChangePriority(element, priority);
+            }
+            if (!reference.isEmpty()) {
+                assertEquals(reference.peekMin(), testing.peekMin());
+                assertEquals(reference.size(), testing.size());
+                for (int e = 0; e < maxElement; e += 1) {
+                    if (reference.contains(e)) {
+                        assertTrue(testing.contains(e));
+                        assertEquals(reference.getPriority(e), testing.getPriority(e));
+                    } else {
+                        //System.out.println("IndexToRemove: " + e);
+                        assertFalse(testing.contains(e));
+                    }
+                }
+            } else {
+                assertTrue(testing.isEmpty());
             }
         }
     }

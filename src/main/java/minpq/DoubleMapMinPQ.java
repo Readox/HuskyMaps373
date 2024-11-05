@@ -83,6 +83,7 @@ public class DoubleMapMinPQ<E> implements MinPQ<E> {
 
     @Override
     public E removeMin() {
+        //System.out.println(elementToPriority.toString());
         if (isEmpty()) {
             throw new NoSuchElementException("PQ is empty");
         }

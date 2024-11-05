@@ -61,27 +61,15 @@ public class TernarySearchTreeAutocomplete implements Autocomplete {
         if (prefix == null) {
             return new ArrayList<>();
         }
-
         Node start = get(overallRoot, prefix, 0);
-
-        //System.out.println("left" + start.left.data);
-        //System.out.println("mid" + start.mid.data);
-        //System.out.println("right" + start.right.data);
-        //returnlist.add(prefix);
-
         if (start.isTerm == true) {
             returnlist.add(prefix);
         }
-
         getNext(start.mid, prefix, returnlist);
-
-        //System.out.println(returnlist);
         return returnlist;
     }
-
     private void getNext(Node n, CharSequence prefix, ArrayList<CharSequence> list) {
         if (n == null) { //end case
-            //System.out.println("__NOTFOUND__");
             return;
         }
         if (n.isTerm == true) {

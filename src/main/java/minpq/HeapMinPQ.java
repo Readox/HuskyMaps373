@@ -1,9 +1,6 @@
 package minpq;
 
-import java.util.Comparator;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * {@link PriorityQueue} implementation of the {@link MinPQ} interface.
@@ -20,9 +17,7 @@ public class HeapMinPQ<E> implements MinPQ<E> {
     /**
      * Constructs an empty instance.
      */
-    public HeapMinPQ() {
-        pq = new PriorityQueue<>(Comparator.comparingDouble(PriorityNode::getPriority));
-    }
+    public HeapMinPQ() {pq = new PriorityQueue<>(Comparator.comparingDouble(PriorityNode::getPriority));}
 
     /**
      * Constructs an instance containing all the given elements and their priority values.
@@ -41,20 +36,29 @@ public class HeapMinPQ<E> implements MinPQ<E> {
         if (contains(element)) {
             throw new IllegalArgumentException("Already contains " + element);
         }
-        // TODO: Replace with your code
-        throw new UnsupportedOperationException("Not implemented yet");
+        pq.add(new PriorityNode<>(element, priority));
     }
 
     @Override
     public boolean contains(E element) {
-        // TODO: Replace with your code
-        throw new UnsupportedOperationException("Not implemented yet");
+        return pq.contains(new PriorityNode<>(element, 0));
     }
 
     @Override
+    //https://stackoverflow.com/questions/50860300/find-an-element-in-a-priorityqueue-by-key
+    //https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/PriorityQueue.html
+    //https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Iterator.html
+
+    // Proud of programming this because I learned how an Iterator works, and this is what made this run in a timely matter
     public double getPriority(E element) {
-        // TODO: Replace with your code
-        throw new UnsupportedOperationException("Not implemented yet");
+
+        for (Iterator<PriorityNode<E>> it = pq.iterator(); it.hasNext(); ) {
+            PriorityNode<E> node = it.next();
+            if (node.getElement().equals(element)) {
+                return node.getPriority();
+            }
+        }
+        throw new NoSuchElementException("Element " + element + " is not present in the data structure");
     }
 
     @Override
@@ -62,8 +66,8 @@ public class HeapMinPQ<E> implements MinPQ<E> {
         if (isEmpty()) {
             throw new NoSuchElementException("PQ is empty");
         }
-        // TODO: Replace with your code
-        throw new UnsupportedOperationException("Not implemented yet");
+        //System.out.println(pq.size());
+        return pq.peek().getElement();
     }
 
     @Override
@@ -71,8 +75,7 @@ public class HeapMinPQ<E> implements MinPQ<E> {
         if (isEmpty()) {
             throw new NoSuchElementException("PQ is empty");
         }
-        // TODO: Replace with your code
-        throw new UnsupportedOperationException("Not implemented yet");
+        return pq.poll().getElement();
     }
 
     @Override
@@ -80,13 +83,13 @@ public class HeapMinPQ<E> implements MinPQ<E> {
         if (!contains(element)) {
             throw new NoSuchElementException("PQ does not contain " + element);
         }
-        // TODO: Replace with your code
-        throw new UnsupportedOperationException("Not implemented yet");
+        pq.remove(new PriorityNode<>(element, 0));
+        pq.add(new PriorityNode<>(element, priority));
+        //System.out.println("pq size " + pq.size());
     }
 
     @Override
     public int size() {
-        // TODO: Replace with your code
-        throw new UnsupportedOperationException("Not implemented yet");
+        return pq.size();
     }
 }

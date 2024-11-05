@@ -1,11 +1,11 @@
+import minpq.MinPQ;
+import minpq.OptimizedHeapMinPQ;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
@@ -37,7 +37,55 @@ public class ReportAnalyzer {
                 .map(MatchResult::group)
                 .toList();
 
-        // TODO: Display the most commonly-reported WCAG recommendations using MinPQ
-        throw new UnsupportedOperationException();
+        //testFunction();
+
+        //System.out.println(wcagTags);
+        Map<String, Double> map = new HashMap<>();
+
+        for(String s : wcagTags) {
+            if (map.containsKey(s)) {
+                map.replace(s, map.get(s) - 1);
+            }
+            else {
+                map.put(s, wcagTags.size() * 1.0);
+            }
+        }
+        //Assemble tags and how often they occur into array, then
+
+        //throw everything into here
+        MinPQ<String> testing = new OptimizedHeapMinPQ<>(map/* this should contain a map with correct priority values*/);
+
+        System.out.println(testing.removeMin());
+        System.out.println(testing.removeMin());
+        System.out.println(testing.removeMin());
+
+        //Use removeMin() three times to get the target data
+    }
+
+
+    public static void testFunction() {
+        String[] data = {"1", "2", "2", "3", "3", "3", "4", "4", "4", "4", "5", "5", "5"};
+
+        Map<String, Double> map = new HashMap<>();
+
+        for(String s : data) {
+            if (map.containsKey(s)) {
+                map.replace(s, map.get(s) - 1);
+            }
+            else {
+                map.put(s, data.length * 1.0);
+            }
+        }
+        //Assemble tags and how often they occur into array, then
+
+        //throw everything into here
+        MinPQ<String> testing = new OptimizedHeapMinPQ<>(map/* this should contain a map with correct priority values*/);
+
+
+        System.out.println(testing.removeMin());
+        System.out.println(testing.removeMin());
+        System.out.println(testing.removeMin());
+        System.out.println(testing.removeMin());
+        System.out.println(testing.removeMin());
     }
 }
