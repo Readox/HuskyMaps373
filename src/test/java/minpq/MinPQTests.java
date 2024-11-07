@@ -6,10 +6,7 @@ import org.junit.jupiter.api.TestInstance;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.TreeMap;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -134,4 +131,72 @@ public abstract class MinPQTests {
             }
         }
     }
+
+
+
+    @Test
+    public void ReportAnalyzerSimulation() throws FileNotFoundException {
+        MinPQ<String> reference = new DoubleMapMinPQ<>();
+        MinPQ<String> testing = createMinPQ();
+
+
+        File inputFile = new File("data/wcag.tsv");
+        Scanner scanner = new Scanner(inputFile);
+        List<String> taglist = new ArrayList<>();
+        while (scanner.hasNextLine()) {
+            String[] line = scanner.nextLine().split("\t", 2);
+            int index = Integer.parseInt(line[0].replace(".", ""));
+            String title = line[1];
+            taglist.add(title);
+        }
+
+        Map<String, Double> map = new HashMap<>();
+        for(String s : taglist) {
+            if (map.containsKey(s)) {
+                map.replace(s, map.get(s) - 1);
+            }
+            else {
+                map.put(s, taglist.size() * 1.0);
+            }
+        }
+        MinPQ<String> tagMap = new OptimizedHeapMinPQ<>(map);
+        List<String> mostCommon = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            mostCommon.add(tagMap.removeMin());
+        }
+
+        // Account for possibility of tags having ties, by updating their priority to be consistent with how many times
+        //      the tag has been added to the MinPQ
+        int iterations = 10000;
+        int maxElement = taglist.size();
+        Random random = new Random();
+        for (int i = 0; i < iterations; i += 1) {
+            int element = random.nextInt(maxElement);
+            double priority = random.nextDouble();
+            //System.out.println(taglist.get(element).getElement());
+            if (mostCommon.contains(element)) {
+                reference.addOrChangePriority(taglist.get(element), 0);
+                testing.addOrChangePriority(taglist.get(element), 0);
+            }
+            else {
+                reference.addOrChangePriority(taglist.get(element), iterations - i);
+                testing.addOrChangePriority(taglist.get(element), iterations - i);
+            }
+            //System.out.println(reference.getPriority(taglist.get(element).getElement()) + " " + testing.getPriority(taglist.get(element).getElement()));
+            //System.out.println(reference.size() + " " + testing.size());
+            assertEquals(reference.peekMin(), testing.peekMin());
+            assertEquals(reference.size(), testing.size());
+        }
+
+        for (int i = 0; i < iterations; i += 1) {
+            if (!reference.isEmpty() && !testing.isEmpty()) {
+                assertEquals(reference.removeMin(), testing.removeMin());
+            }
+            else {
+                break;
+            }
+        }
+    }
+
+
 }

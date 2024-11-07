@@ -169,6 +169,7 @@ public class OptimizedHeapMinPQ<E> implements MinPQ<E> {
 
     @Override
     public int size() {
+        //System.out.println(elements.toString());
         return elements.size();
     }
 
