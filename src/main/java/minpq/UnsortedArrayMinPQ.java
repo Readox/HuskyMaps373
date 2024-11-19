@@ -108,7 +108,6 @@ public class UnsortedArrayMinPQ<E> implements MinPQ<E> {
                 ePriorityNode.setPriority(priority);
             }
         }
-        //throw new NoSuchElementException("Element " + element + " is not present in the data structure");
     }
 
     @Override

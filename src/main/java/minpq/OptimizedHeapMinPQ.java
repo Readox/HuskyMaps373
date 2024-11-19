@@ -115,25 +115,15 @@ public class OptimizedHeapMinPQ<E> implements MinPQ<E> {
 
     @Override
     public E removeMin() {
-
         if (isEmpty()) {
             throw new NoSuchElementException("PQ is empty");
         }
-
-        //System.out.println("ISMINHEAP: " + isMinHeap());
-
-        //System.out.println("Before: " + elements.toString());
         PriorityNode<E> returnVal = elements.get(0);
         updateHashMap(0, elements.size() - 1);
         Collections.swap(elements, 0, elements.size()-1);
         elements.removeLast();
         elementsToIndex.remove(returnVal.getElement());
         sink(0);
-        //System.out.println("Remove Min: " + elements.toString());
-        //System.out.println("Return Value: " + returnVal.getElement() + " " + returnVal.getPriority());
-
-        //System.out.println("ISMINHEAP: " + isMinHeap());
-
         return returnVal.getElement();
     }
 
@@ -142,7 +132,6 @@ public class OptimizedHeapMinPQ<E> implements MinPQ<E> {
         if (!contains(element)) {
             throw new NoSuchElementException("PQ does not contain " + element);
         }
-
         int index = elementsToIndex.get(element); // should throw exception if element is not present
         updateHashMap(index, elements.size() - 1);
         Collections.swap(elements, index, elements.size()-1);
@@ -150,21 +139,6 @@ public class OptimizedHeapMinPQ<E> implements MinPQ<E> {
         elementsToIndex.remove(element);
         sink(index);
         add(element, priority);
-        /*
-        for (int i = 0; i < elements.size(); i++) {
-            if (elements.get(i).getElement().equals(element)) {
-                Collections.swap(elements, i, elements.size()-1);
-                updateHashMap(i, elements.size() - 1);
-                elementsToIndex.remove(elements.removeLast());
-                sink(i);
-                add(element, priority);
-                return;
-            }
-        }
-
-         */
-        //throw new NoSuchElementException("Element " + element + " is not present in the data structure");
-
     }
 
     @Override

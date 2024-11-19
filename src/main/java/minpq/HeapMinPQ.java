@@ -85,7 +85,6 @@ public class HeapMinPQ<E> implements MinPQ<E> {
         }
         pq.remove(new PriorityNode<>(element, 0));
         pq.add(new PriorityNode<>(element, priority));
-        //System.out.println("pq size " + pq.size());
     }
 
     @Override

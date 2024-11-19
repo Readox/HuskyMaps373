@@ -69,8 +69,12 @@ public class GenerativeSeamFinder implements SeamFinder {
         private final Node source = new Node() {
             @Override
             public List<Edge<Node>> neighbors(Picture picture, EnergyFunction f) {
-                // TODO: Replace with your code
-                throw new UnsupportedOperationException("Not implemented yet");
+                List<Edge<Node>> result = new ArrayList<>(picture.height());
+                for (int j = 0; j < picture.height(); j += 1) {
+
+                    result.add(new Edge<>(this, new Pixel(0, j), f.apply(picture, 0, j)));
+                }
+                return result;
             }
         };
         /**
@@ -79,8 +83,7 @@ public class GenerativeSeamFinder implements SeamFinder {
         private final Node sink = new Node() {
             @Override
             public List<Edge<Node>> neighbors(Picture picture, EnergyFunction f) {
-                // TODO: Replace with your code
-                throw new UnsupportedOperationException("Not implemented yet");
+                return List.of();
             }
         };
 
@@ -126,8 +129,28 @@ public class GenerativeSeamFinder implements SeamFinder {
 
             @Override
             public List<Edge<Node>> neighbors(Picture picture, EnergyFunction f) {
-                // TODO: Replace with your code
-                throw new UnsupportedOperationException("Not implemented yet");
+                List<Edge<Node>> list = new ArrayList<>(4);
+
+                // Proud of getting the logic here correct on my first try
+                if( (x + 1) < picture.width()) {
+                    //right-up
+                    if( (y - 1) > 0) {
+                        list.add(new Edge<>(this, new Pixel(x + 1, y - 1) , f.apply(picture, x + 1, y - 1)));
+                    }
+
+                    //right-middle
+                    list.add(new Edge<>(this, new Pixel(x + 1, y) , f.apply(picture, x + 1, y)));
+
+                    //right-down
+                    if( (y + 1) < picture.height()) {
+                        list.add(new Edge<>(this, new Pixel(x + 1, y + 1) , f.apply(picture, x + 1, y + 1)));
+                    }
+                }
+                else {
+                    list.add(new Edge<>(this, sink, 0));
+                }
+
+                return list;
             }
 
             @Override

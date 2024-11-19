@@ -53,6 +53,7 @@ public abstract class SeamFinderTests {
     }
 
     @ParameterizedTest
+
     @ValueSource(strings = {"HJoceanSmall", "stripes", "diagonals", "diag_test", "chameleon",
                             "12x10", "10x12", "10x10", "8x3", "7x10", "7x3", "6x5", "5x6", "4x6",
                             "3x8", "3x7", "3x4", "3x3"})
