@@ -2,6 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
+    id("com.gradleup.shadow") version "8.3.5"
     java
 }
 
@@ -16,7 +17,7 @@ repositories {
 dependencies {
     implementation("commons-codec:commons-codec:1.17.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")
-    implementation("io.javalin:javalin:6.2.0")
+    implementation("io.javalin:javalin:6.3.0")
     implementation("org.locationtech.spatial4j:spatial4j:0.8")
     implementation("org.slf4j:slf4j-simple:2.0.13")
 
@@ -35,4 +36,8 @@ tasks.withType<Test> {
     testLogging.events = setOf(TestLogEvent.FAILED, TestLogEvent.SKIPPED)
     testLogging.showStandardStreams = true
     testLogging.showExceptions = true
+}
+
+tasks.jar {
+    manifest.attributes["Main-Class"] = "MapServer"
 }

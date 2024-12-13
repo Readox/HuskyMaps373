@@ -58,7 +58,7 @@ public class MapServer {
                 double goalLat = ctx.queryParamAsClass("goalLat", Double.class).get();
                 Point start = factory.pointLatLon(startLat, startLon);
                 Point goal = factory.pointLatLon(goalLat, goalLon);
-                route = map.shortestPath(start, goal);
+/*Start*/                route = map.shortestPath(start, goal);
             } catch (ValidationException e) {
                 route = List.of();
             }
